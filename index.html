@@ -23,7 +23,7 @@
       }
 
       textarea {
-        height: 250px;
+        height: 215px;
         width: 100%;
         max-width: var(--roomview-width);
       }
@@ -34,6 +34,8 @@
 <main>
     <roomview-preview></roomview-preview>
     <form action="">
+        <h3>Roomview Tester</h3>
+        <p><small>A room is eligeble if the work (blue) is inside the green area (available space) and outside the red area (minimal space).</small></p>
         <textarea name="config">
 {
     img: 'https://media.lumas.com/roomview/office/60-80-office-panoquer.jpg',
@@ -47,14 +49,14 @@
     }
 }
         </textarea>
-        <br><br>Exceptions<br><small>Works that have different size-ratios get alternative rules</small><br><br>
+        <br><br><b>Exceptions</b><br><small>Works that have different size-ratios get alternative rules</small><br><br>
         <label><input type="radio" name="exception" value="wide"> Wide <small>height/width < .55</small></label><br>
         <label><input type="radio" name="exception" value="panorama"> Panorama <small>height/width <
             .3</small></label><br>
         <label><input type="radio" name="exception" value="portrait"> Portrait <small>height/width > 1.5</small></label><br>
         <label><input type="radio" name="exception" value=""> None</label><br>
 
-        <br><br>Test work<br>
+        <br><br>Test work <small>(width x height)</small><br>
         <label><input type="text" placeholder="70x70 (cm)"></label>
     </form>
 </main>
