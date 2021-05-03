@@ -56,8 +56,8 @@
         <label><input type="radio" name="exception" value="portrait"> Portrait <small>height/width > 1.5</small></label><br>
         <label><input type="radio" name="exception" value=""> None</label><br>
 
-        <br><br>Test work <small>(width x height)</small><br>
-        <label><input type="text" placeholder="70x70 (cm)"></label>
+        <br><br>Test work <small>(height x width)</small><br>
+        <label><input type="text" placeholder="70x140 (cm)"></label>
     </form>
 </main>
 
@@ -104,8 +104,8 @@
       const conversion = room.wallHeight.cm / this.wallHeightPx;
       const spaceHeight = (room.availableSpace.rightBottom[1] - room.availableSpace.leftTop[1]);
       const spaceWidth = (room.availableSpace.rightBottom[0] - room.availableSpace.leftTop[0]);
-      const width = Number(parts[0]) / conversion;
-      const height = Number(parts[1]) / conversion;
+      const width = Number(parts[1]) / conversion;
+      const height = Number(parts[0]) / conversion;
       el.style.cssText = `
         width: ${width}px;
         height: ${height}px;
