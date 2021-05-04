@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Room Tester</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="shortcut icon" href="favicon.ico">
+</head>
+<body>
+
+<main>
+    <form action="">
+        <details open>
+            <summary>
+                <h3>Room Tester</h3>
+                <svg viewBox="0 0 160 160"><g fill="currentColor"><path d="M80 15a65 65 0 100 130 65 65 0 000-130zm0 10a55 55 0 110 110 55 55 0 010-110z"/><path d="M90 51.3a11.2 11.3 0 11-22.5 0 11.2 11.3 0 1122.5 0zM90.7 111c-.1 2.7 1.2 3.5 4.3 3.8h5v5.2H61v-5.1l5.4-.1c3.3-.1 4.1-1.4 4.4-3.8V80c0-4.8-6.3-4-10.8-4v-5L90.7 70"/></g></svg>
+                <svg viewBox="0 0 24 24"><path fill="currentColor" d="M18.7 6.7l-1.4-1.4-5.3 5.3-5.3-5.3-1.4 1.4 5.3 5.3-5.3 5.3 1.4 1.4 5.3-5.3 5.3 5.3 1.4-1.4-5.3-5.3z"/></svg>
+            </summary>
+            <p>A room is eligible if the work (blue) is inside the green area (available space) and outside the red area (minimal space).</p>
+            <p>To test the current available rooms in the configuration for a specific work, try the <a href="index.html">Configuration Tester</a>.</p>
+        </details>
+        <p><b>Work size in mm <small>(height x width)</small></b></p>
+        <label><input type="text" placeholder="700x1400"></label>
+        <p><b>Room config</b></p>
+        <textarea name="config">
+{
+    img: 'https://media.lumas.com/roomview/office/60-80-office-panoquer.jpg',
+    thumbnail: 'https://media.lumas.com/roomview/office/60-80-office_thumb.jpg',
+    wallHeight: {
+    cm: 134
+    },
+    availableSpace: {
+    leftTop: [342, 134],
+    rightBottom: [886, 353]
+    }
+}
+        </textarea>
+        <p><b>Exceptions</b><br><small>Works that have different size-ratios get alternative rules</small></p>
+
+        <label><input type="radio" name="exception" value="wide"> Wide <small>height/width < .55</small></label><br>
+        <label><input type="radio" name="exception" value="panorama"> Panorama <small>height/width < .3</small></label><br>
+        <label><input type="radio" name="exception" value="portrait"> Portrait <small>height/width > 1.5</small></label><br>
+        <label><input type="radio" name="exception" value="" checked> None</label><br>
+
+    </form>
+    <roomview-preview></roomview-preview>
+</main>
+
+<script type="module">
+  import {roomviewPreview} from "./js/roomview-preview.js";
+
+  const preview = document.querySelector('roomview-preview');
+  window.addEventListener('load', () => {
+    preview.config = document.querySelector('textarea').value;
+    preview.exception = document.querySelector('input[name="exception"]').value;
+  });
+
+  document.forms[0].addEventListener('submit', e => {
+    e.preventDefault();
+  });
+
+  document.querySelector('textarea').addEventListener('keyup', e => {
+    preview.config = e.target.value;
+  });
+
+  document.querySelector('textarea').addEventListener('keydown', e => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+    }
+  });
+
+  document.querySelectorAll('input[type="radio"]').forEach(el => {
+    el.addEventListener('click', e => {
+      preview.exception = e.target.value;
+    });
+  });
+
+  document.querySelector('input[type="text"]').addEventListener('keyup', e => {
+    e.preventDefault();
+    const parts = e.target.value.split('x');
+    document.querySelector('input[type="radio"][value=""]').checked = true;
+    if (parts.length !== 2) {
+      return;
+    }
+    preview.product = parts;
+
+    const productRatio = parts[0] / parts[1];
+    if (productRatio >= 1.5) {
+      document.querySelector('input[type="radio"][value="portrait"]').checked = true;
+    } else if (productRatio <= .55) {
+      document.querySelector('input[type="radio"][value="wide"]').checked = true;
+    } else if (productRatio <= .3) {
+      document.querySelector('input[type="radio"][value="panorama"]').checked = true;
+    }
+  });
+
+  if (localStorage.getItem('hide-roomview-info') !== null) {
+    document.querySelector('details').removeAttribute('open');
+  } else {
+    localStorage.setItem('hide-roomview-info', 'true');
+  }
+</script>
+</body>
+</html>
